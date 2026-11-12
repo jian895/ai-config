@@ -1,0 +1,221 @@
+{
+  "name": "品牌采购触发表",
+  "version": "2026-11-12",
+  "description": "按品牌定义何时触发采购补货。每条记录对应一个品牌。",
+  "fields": {
+    "brand": "品牌名称，主键",
+    "enabled": "是否启用；false 的品牌跳过",
+    "cycle_type": "补货周期类型：weekly=每周，monthly=每月",
+    "restock_days": "补货日列表。weekly 时 1=周一…7=周日；monthly 时为每月几号",
+    "lead_time_days": "到货天数：下单到入库的天数",
+    "safety_stock_days": "安全库存天数：到货前至少留够几天销量",
+    "allow_adhoc_restock": "是否允许非补货日临时补货",
+    "adhoc_trigger_days": "临时补货触发线：商品可售天数（库存÷日均销量）低于此值时触发临时补货",
+    "min_order_amount": "起订金额（元），0 表示不限制",
+    "below_min_order_action": "未达起订金额时：top_up=凑单（再补些快缺货商品凑够金额），postpone=顺延到下个补货日，notify_anyway=仍照常提醒",
+    "sales_window_days": "日均销量按最近多少天计算",
+    "note": "备注"
+  },
+  "rules": [
+    "定期补货：到补货日检查该品牌所有商品。目标库存 = 日均销量 × (lead_time_days + 距下个补货日天数 + safety_stock_days)；缺口按商品的采购倍数向上取整。",
+    "临时补货：非补货日，若 allow_adhoc_restock 为 true 且某商品可售天数 < adhoc_trigger_days，则单独触发。",
+    "起订校验：汇总采购金额 < min_order_amount（且 >0）时，按 below_min_order_action 处理。"
+  ],
+  "brands": [
+    {
+      "brand": "朱栈",
+      "enabled": true,
+      "cycle_type": "monthly",
+      "restock_days": [
+        5,
+        25
+      ],
+      "lead_time_days": 4,
+      "safety_stock_days": 5,
+      "allow_adhoc_restock": true,
+      "adhoc_trigger_days": 5,
+      "min_order_amount": 5000,
+      "below_min_order_action": "top_up",
+      "sales_window_days": 90,
+      "note": null
+    },
+    {
+      "brand": "达尔肤",
+      "enabled": true,
+      "cycle_type": "monthly",
+      "restock_days": [
+        5,
+        15,
+        25
+      ],
+      "lead_time_days": 5,
+      "safety_stock_days": 5,
+      "allow_adhoc_restock": true,
+      "adhoc_trigger_days": 5,
+      "min_order_amount": 10000,
+      "below_min_order_action": "top_up",
+      "sales_window_days": 90,
+      "note": null
+    },
+    {
+      "brand": "毕生之研",
+      "enabled": true,
+      "cycle_type": "weekly",
+      "restock_days": [
+        1
+      ],
+      "lead_time_days": 4,
+      "safety_stock_days": 10,
+      "allow_adhoc_restock": true,
+      "adhoc_trigger_days": 5,
+      "min_order_amount": 10000,
+      "below_min_order_action": "top_up",
+      "sales_window_days": 90,
+      "note": null
+    },
+    {
+      "brand": "丝塔芙",
+      "enabled": true,
+      "cycle_type": "monthly",
+      "restock_days": [
+        1
+      ],
+      "lead_time_days": 5,
+      "safety_stock_days": 10,
+      "allow_adhoc_restock": false,
+      "adhoc_trigger_days": 5,
+      "min_order_amount": 0,
+      "below_min_order_action": "top_up",
+      "sales_window_days": 90,
+      "note": null
+    },
+    {
+      "brand": "绽妍",
+      "enabled": true,
+      "cycle_type": "weekly",
+      "restock_days": [
+        2
+      ],
+      "lead_time_days": 3,
+      "safety_stock_days": 5,
+      "allow_adhoc_restock": true,
+      "adhoc_trigger_days": 5,
+      "min_order_amount": 10000,
+      "below_min_order_action": "top_up",
+      "sales_window_days": 90,
+      "note": null
+    },
+    {
+      "brand": "Menokin",
+      "enabled": true,
+      "cycle_type": "weekly",
+      "restock_days": [
+        3
+      ],
+      "lead_time_days": 4,
+      "safety_stock_days": 10,
+      "allow_adhoc_restock": true,
+      "adhoc_trigger_days": 5,
+      "min_order_amount": 10000,
+      "below_min_order_action": "top_up",
+      "sales_window_days": 90,
+      "note": null
+    },
+    {
+      "brand": "安娜柏林",
+      "enabled": true,
+      "cycle_type": "weekly",
+      "restock_days": [
+        4
+      ],
+      "lead_time_days": 4,
+      "safety_stock_days": 5,
+      "allow_adhoc_restock": true,
+      "adhoc_trigger_days": 5,
+      "min_order_amount": 10000,
+      "below_min_order_action": "notify_anyway",
+      "sales_window_days": 90,
+      "note": null
+    },
+    {
+      "brand": "维德勒",
+      "enabled": true,
+      "cycle_type": "weekly",
+      "restock_days": [
+        3
+      ],
+      "lead_time_days": 6,
+      "safety_stock_days": 5,
+      "allow_adhoc_restock": true,
+      "adhoc_trigger_days": 5,
+      "min_order_amount": 30000,
+      "below_min_order_action": "top_up",
+      "sales_window_days": 90,
+      "note": null
+    },
+    {
+      "brand": "施颜适",
+      "enabled": true,
+      "cycle_type": "weekly",
+      "restock_days": [
+        4
+      ],
+      "lead_time_days": 4,
+      "safety_stock_days": 5,
+      "allow_adhoc_restock": true,
+      "adhoc_trigger_days": 5,
+      "min_order_amount": 20000,
+      "below_min_order_action": "top_up",
+      "sales_window_days": 90,
+      "note": null
+    },
+    {
+      "brand": "OUT OF OFFICE",
+      "enabled": true,
+      "cycle_type": "weekly",
+      "restock_days": [
+        2
+      ],
+      "lead_time_days": 4,
+      "safety_stock_days": 10,
+      "allow_adhoc_restock": true,
+      "adhoc_trigger_days": 10,
+      "min_order_amount": 30000,
+      "below_min_order_action": "top_up",
+      "sales_window_days": 90,
+      "note": null
+    },
+    {
+      "brand": "ukiss",
+      "enabled": true,
+      "cycle_type": "weekly",
+      "restock_days": [
+        1
+      ],
+      "lead_time_days": 4,
+      "safety_stock_days": 5,
+      "allow_adhoc_restock": true,
+      "adhoc_trigger_days": 5,
+      "min_order_amount": 30000,
+      "below_min_order_action": "notify_anyway",
+      "sales_window_days": 90,
+      "note": null
+    },
+    {
+      "brand": "Lilybyred",
+      "enabled": true,
+      "cycle_type": "monthly",
+      "restock_days": [
+        10
+      ],
+      "lead_time_days": 10,
+      "safety_stock_days": 20,
+      "allow_adhoc_restock": true,
+      "adhoc_trigger_days": 10,
+      "min_order_amount": 20000,
+      "below_min_order_action": "top_up",
+      "sales_window_days": 90,
+      "note": null
+    }
+  ]
+}

@@ -13,13 +13,14 @@
     "adhoc_trigger_days": "临时补货触发线：商品可售天数（库存÷日均销量）低于此值时触发临时补货",
     "min_order_amount": "起订金额（元），0 表示不限制",
     "below_min_order_action": "未达起订金额时：top_up=凑单（再补些快缺货商品凑够金额），postpone=顺延到下个补货日，notify_anyway=仍照常提醒",
-    "sales_window_days": "日均销量按最近多少天计算",
+    "sales_window_days": "日均销量最长回看天数（上限窗口，含 check_date；早于 item.created_at 的日期不计入分子与分母）",
     "note": "备注"
   },
   "rules": [
     "定期补货：到补货日检查该品牌所有商品。目标库存 = 日均销量 × (lead_time_days + 距下个补货日天数 + safety_stock_days)；缺口按商品的采购倍数向上取整。",
     "临时补货：非补货日，若 allow_adhoc_restock 为 true 且某商品可售天数 < adhoc_trigger_days，则单独触发。",
-    "起订校验：汇总采购金额 < min_order_amount（且 >0）时，按 below_min_order_action 处理。"
+    "起订校验：汇总采购金额 < min_order_amount（且 >0）时，按 below_min_order_action 处理。",
+    "日均销量：按 SKU、Asia/Shanghai 日历日。sales_window_days 只是最长回看（当前各品牌均为 90），先取含 check_date 的最近这些天，再把早于 item.created_at 的日期从净销量分子和天数分母中同时去掉。effective_start=max(check_date 往前 (sales_window_days-1) 个日历日, created_at)；effective_days=(check_date-effective_start).days+1；日均需求=max(0, 日期恰在 effective_start 至 check_date 闭区间的净销量)/effective_days。创建日不晚于窗口起点时用最近 sales_window_days 天净销量除以该天数，不用终身累计；创建日晚于窗口起点时分子与分母改用这段更短的对齐窗口。创建当日及之后直至 check_date 的零销日计入分母，创建日与检查日同一天则 effective_days=1。created_at 缺失、非法或晚于 check_date 时待复核，不猜测日龄，不用 0 作除数。该日期是选用的代理，不代表实际上市日。不做 7/15/30 加权。例：check_date=2026-11-12 时 90 天起点为 2026-08-15；created_at=2026-11-06 为 7 天，净销量 96 则日均 96/7≈13.71。"
   ],
   "brands": [
     {

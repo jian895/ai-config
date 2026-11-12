@@ -12,16 +12,13 @@
 
 ## 读取方式
 
-仓库为私有，读取需要带 GitHub Token：
+仓库公开，直接访问即可，无需 Token：
 
 ```
 https://raw.githubusercontent.com/jian895/ai-config/main/brand_restock_rules.json
 ```
 
-```bash
-curl -H "Authorization: token <你的Token>" \
-  https://raw.githubusercontent.com/jian895/ai-config/main/brand_restock_rules.json
-```
+注意：仓库公开，请勿在此存放敏感信息。
 
 ## 更新
 

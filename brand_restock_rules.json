@@ -21,7 +21,7 @@
     "临时补货：非补货日，若 allow_adhoc_restock 为 true 且某商品可售天数 < adhoc_trigger_days，则单独触发；同时给出推荐下单数量（目标覆盖天数 = lead_time_days + 距下个补货日天数 + safety_stock_days，扣除可用库存与在途后按采购倍数/箱规取整），该数量仅为建议、需人工确认后下单。",
     "起订校验：汇总采购金额 < min_order_amount（且 >0）时，按 below_min_order_action 处理；top_up 时按日均销量降序优先为畅销商品追加一个采购步长，设追加数量上限（累计追加不超过 10 次），不无限追加库存；凑单后仍未达标时提示确认。",
     "日均销量：按 SKU、Asia/Shanghai 日历日。sales_window_days 只是最长回看（当前各品牌均为 90），先取含 check_date 的最近这些天，再把早于 item.created_at 的日期从净销量分子和天数分母中同时去掉。effective_start=max(check_date 往前 (sales_window_days-1) 个日历日, created_at)；effective_days=(check_date-effective_start).days+1；日均需求=max(0, 日期恰在 effective_start 至 check_date 闭区间的净销量)/effective_days。创建日不晚于窗口起点时用最近 sales_window_days 天净销量除以该天数，不用终身累计；创建日晚于窗口起点时分子与分母改用这段更短的对齐窗口。创建当日及之后直至 check_date 的零销日计入分母，创建日与检查日同一天则 effective_days=1。created_at 缺失、非法或晚于 check_date 时待复核，不猜测日龄，不用 0 作除数。该日期是选用的代理，不代表实际上市日。不做 7/15/30 加权。例：check_date=2026-11-12 时 90 天起点为 2026-08-15；created_at=2026-11-06 为 7 天，净销量 96 则日均 96/7≈13.71。",
-    "输出：单张 Excel 简表，列为 品牌、产品、实际区间净销量、日均销量、可用库存、在途、最终建议补货量、必要风险简短备注。负库存按 0 计算且不额外补足欠货，单独提示核对；品牌大小写不敏感匹配（Menokin/MENOKIN、ukiss/Ukiss）以避免漏检。"
+    "输出：单张 Excel 简表，列为 品牌、SKU、产品、实际区间净销量、日均销量、可用库存、在途、最终建议补货量、必要风险简短备注。SKU 与产品名称分列展示，不合并。负库存按 0 计算且不额外补足欠货，单独提示核对；品牌大小写不敏感匹配（Menokin/MENOKIN、ukiss/Ukiss）以避免漏检。"
   ],
   "brands": [
     {
